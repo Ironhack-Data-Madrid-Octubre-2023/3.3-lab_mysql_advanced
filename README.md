@@ -4,6 +4,8 @@
 
 ## Introduction
 
+
+
 In this lab you will practice MySQL Subqueries, Temp Tables, and Action Queries. **We will again use the [publications database](https://s3-eu-west-1.amazonaws.com/ih-materials/uploads/data-static/data/module-1/publications.sql.zip) used in the *Joins and Relationships* lesson.**
 
 Create a `solutions.sql` file in the `your-code` directory to record your solutions to all challenges.
