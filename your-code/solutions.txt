@@ -1,0 +1,87 @@
+CHALLENGE 1:
+
+SELECT
+    t.title_id AS "Title ID",
+    ta.au_id AS "Author ID",
+    t.price * s.qty * t.royalty / 100 * ta.royaltyper / 100 AS "Royalty of each sale for each author"
+FROM
+    titles t
+INNER JOIN titleauthor ta ON t.title_id = ta.title_id
+INNER JOIN sales s ON t.title_id = s.title_id;
+
+
+SELECT
+    t.title_id AS "Title ID",
+    ta.au_id AS "Author ID",
+    sum(t.price * s.qty * t.royalty / 100 * ta.royaltyper / 100) AS 'Aggregated royalties of each title for each author'
+FROM
+    titles t
+INNER JOIN titleauthor ta ON t.title_id = ta.title_id
+INNER JOIN sales s ON t.title_id = s.title_id
+
+GROUP BY
+ta.au_id, t.title_id
+ORDER BY
+`Aggregated royalties of each title for each author` ASC;
+
+
+SELECT
+    t.title_id AS "Title ID",
+    ta.au_id AS "Author ID",
+    t.advance as 'total advance',
+    sum(t.advance  * s.qty * t.royalty / 100 * ta.royaltyper / 100) AS 'total profits'
+FROM
+    titles as t
+INNER JOIN titleauthor AS ta ON ta.title_id = t.title_id
+INNER JOIN sales s ON t.title_id = s.title_id
+
+GROUP BY
+ta.au_id, t.title_id
+ORDER BY
+`total profits` DESC
+LIMIT 3;
+
+-----------------
+
+CHALLENGE 2:
+
+CREATE TEMPORARY TABLE CHALLENGE2 AS
+
+SELECT
+    t.title_id AS "Title ID",
+    ta.au_id AS "Author ID",
+    t.advance as 'total advance',
+    sum(t.advance  * s.qty * t.royalty / 100 * ta.royaltyper / 100) AS 'total profits'
+FROM
+    titles as t
+INNER JOIN titleauthor AS ta ON ta.title_id = t.title_id
+INNER JOIN sales s ON t.title_id = s.title_id
+
+GROUP BY
+ta.au_id, t.title_id
+ORDER BY
+`total profits` DESC
+LIMIT 3;
+
+
+-----------------
+
+CHALLENGE 3:
+
+CREATE TABLE most_profiting_authors AS
+
+SELECT
+    t.title_id AS "Title ID",
+    ta.au_id AS "Author ID",
+    t.advance as 'total advance',
+    sum(t.advance  * s.qty * t.royalty / 100 * ta.royaltyper / 100) AS 'total profits'
+FROM
+    titles as t
+INNER JOIN titleauthor AS ta ON ta.title_id = t.title_id
+INNER JOIN sales s ON t.title_id = s.title_id
+
+GROUP BY
+ta.au_id, t.title_id
+ORDER BY
+`total profits` DESC
+LIMIT 3;
