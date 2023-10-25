@@ -52,7 +52,7 @@ LIMIT 3;
 
 
 -- CHALLENGE 2
---INTENTAR CON TABLAS TEMPORALES
+--INTENTAR CON TABLAS TEMPORALES -> Se hace con: create temporary table publications.NOMBRE_TABLA_TEMPORAL
 
 --CHALLENGE 3
 CREATE TABLE publications.most_profiting_authors SELECT Author_ID,
