@@ -47,7 +47,15 @@ FROM
         LEFT JOIN
     titles t ON subquery.Title_ID = t.title_id
 GROUP BY subquery.Author_ID
-ORDER BY TotalRoyaltyAdvance DESC;
+ORDER BY TotalRoyaltyAdvance DESC
+LIMIT 3;
+
+
+-- CHALLENGE 2
+--INTENTAR CON TABLAS TEMPORALES
+
+--CHALLENGE 3
+
        
        
        
