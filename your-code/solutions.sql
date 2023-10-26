@@ -40,3 +40,58 @@ FROM
     authors AS a ON step22.au_id = a.au_id
 GROUP BY a.au_id;
 
+
+-- CHALLENGE 2 - Alternative Solution
+
+
+SELECT 
+    a.au_id, ROUND(SUM(advance + aggroyalty), 1) AS totalprofit
+FROM
+    (SELECT 
+        au_id, title_id, SUM(sales_royalty) AS aggroyalty
+    FROM
+        (SELECT 
+        a.au_id,
+            t.title_id,
+            (t.price * s.qty * t.royalty / 100 * ta.royaltyper / 100) AS sales_royalty
+    FROM
+        sales AS s
+    INNER JOIN titles AS t ON s.title_id = t.title_id
+    INNER JOIN titleauthor AS ta ON t.title_id = ta.title_id
+    INNER JOIN authors AS a ON ta.au_id = a.au_id) AS step1
+    GROUP BY au_id , title_id) AS step22
+        INNER JOIN
+    titles AS t ON step22.title_id = t.title_id
+        INNER JOIN
+    authors AS a ON step22.au_id = a.au_id
+GROUP BY a.au_id
+ORDER BY totalprofit DESC;
+
+
+-- CHALLENGE 3 
+
+
+CREATE TABLE most_profiting_authors
+
+(SELECT 
+    a.au_id, ROUND(SUM(advance + aggroyalty), 1) AS profits
+FROM
+    (SELECT 
+        au_id, title_id, SUM(sales_royalty) AS aggroyalty
+    FROM
+        (SELECT 
+        a.au_id,
+            t.title_id,
+            (t.price * s.qty * t.royalty / 100 * ta.royaltyper / 100) AS sales_royalty
+    FROM
+        sales AS s
+    INNER JOIN titles AS t ON s.title_id = t.title_id
+    INNER JOIN titleauthor AS ta ON t.title_id = ta.title_id
+    INNER JOIN authors AS a ON ta.au_id = a.au_id) AS step1
+    GROUP BY au_id , title_id) AS step22
+        INNER JOIN
+    titles AS t ON step22.title_id = t.title_id
+        INNER JOIN
+    authors AS a ON step22.au_id = a.au_id
+GROUP BY a.au_id
+ORDER BY profits DESC);
