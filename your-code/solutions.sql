@@ -100,6 +100,7 @@ LIMIT 3;
 ## Challenge 3 - Most Profiting Authors
 
 CREATE TABLE most_profiting_authors AS
+
 SELECT 
     suma_salesroyalty.`Author ID` AS au_id, 
     (suma_salesroyalty.`suma salesroyalty`+ t.advance) AS `profits`
@@ -108,4 +109,4 @@ FROM suma_salesroyalty
 INNER JOIN titles AS t 
 ON suma_salesroyalty.`Title ID` = t.title_id
 
-ORDER BY profits DESC;
+ORDER BY `profits` DESC;
