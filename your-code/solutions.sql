@@ -54,6 +54,30 @@ LIMIT 3;
 -- CHALLENGE 2
 --INTENTAR CON TABLAS TEMPORALES -> Se hace con: create temporary table publications.NOMBRE_TABLA_TEMPORAL
 
+-- Step 1
+CREATE TEMPORARY TABLE publications.royalty_step1 -- Mecreo una tabla temporal con lo el step 1 del primer challenge
+SELECT 
+    t.title_id Title_ID,
+    ta.au_id Author_ID,
+    (t.price * s.qty * t.royalty / 100 * ta.royaltyper / 100) SalesRoyalty
+FROM
+    titles t
+
+INNER JOIN titleauthor ta
+ON t.title_id = ta.title_id
+INNER JOIN sales s
+ON t.title_id = s.title_id;  
+
+-- Step 2
+SELECT 
+    Title_ID, Author_ID, SUM(SalesRoyalty) Total_Royalties -- Pillo las columnas de la tabla temporal que he creado y esta vez hago la suma de los royalties y agrupo por título y autor
+FROM
+    royalty_step1
+GROUP BY Title_ID , Author_ID
+ORDER BY Total_Royalties DESC; -- Ordeno de mayor a menos los royalties totales
+	
+
+
 --CHALLENGE 3
 CREATE TABLE publications.most_profiting_authors SELECT Author_ID,
     SUM(subquery.Royalty + t.advance) AS TotalRoyaltyAdvance FROM
