@@ -16,7 +16,7 @@ INNER JOIN sales ON sales.title_id = titles.title_id)
 GROUP BY authors.au_id, titles.title_id;
 
 ### Step 3:
-SELECT authors.au_id as `AUTHOR ID`, titles.title_id as `TITLE ID`, SUM(titles.price * sales.qty * titles.royalty / 100 * titleauthor.royaltyper / 100) as `ROYALTY`
+SELECT authors.au_id as `AUTHOR ID`, SUM(titles.price * sales.qty * titles.royalty / 100 * titleauthor.royaltyper / 100) as `ROYALTY`
 FROM (authors
 INNER JOIN titleauthor ON titleauthor.au_id = authors.au_id
 INNER JOIN titles ON titles.title_id = titleauthor.title_id
