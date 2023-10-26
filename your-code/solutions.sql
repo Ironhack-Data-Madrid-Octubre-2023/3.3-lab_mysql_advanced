@@ -78,7 +78,12 @@ LIMIT 3;
 
 --Challenge 3
 
-CREATE TABLE most_profiting_authors
+CREATE TABLE most_profiting_authors (
+id INT PRIMARY KEY NOT NULL,
+au_id VARCHAR(20),
+profits VARCHAR (20)
+);
+INSERT INTO most_profiting_authors(au_id, profits)
 SELECT
     temp_aggregated.`AUTHOR ID` AS `au_id`,
     (temp_aggregated.`AGGREGATED ROYALTIES` + titles.advance) AS `profits`
