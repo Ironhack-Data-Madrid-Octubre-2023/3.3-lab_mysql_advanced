@@ -35,7 +35,7 @@ LIMIT 3;
 
 --CHALLENGE 2 ALTERNATIVE SOLUTION
 
-CREATE TEMPORARY TABLE Step1 AS
+CREATE TEMPORARY TABLE publications.Step1temp AS
 SELECT titles.title_id AS `TITLE ID`,
        authors.au_id AS `AUTHOR ID`, 
        titles.price * sales.qty * titles.royalty / 100 * titleauthor.royaltyper / 100 as `ROYALTY`
@@ -45,21 +45,19 @@ LEFT JOIN titles ON titleauthor.title_id = titles.title_id
 LEFT JOIN publishers ON publishers.pub_id = titles.pub_id
 LEFT JOIN sales ON titles.title_id = sales.title_id;
 
-CREATE TEMPORARY TABLE Step2 AS
+CREATE TEMPORARY TABLE publications.Step2temp AS
 SELECT `TITLE ID` as title_id , `AUTHOR ID`, SUM(`ROYALTY`) AS `ROYALTY`
-FROM Step1
+FROM publications.Step1temp
 GROUP BY `TITLE ID`, `AUTHOR ID`;
 
-CREATE TEMPORARY TABLE Step3 AS
-SELECT title_id , `AUTHOR ID`, SUM(`ROYALTY`) + advance AS `ROYALTY`
-FROM Step1
-LEFT JOIN titles ON Step1.title_id = titles.title_id
+SELECT s2.title_id as 'TITLE ID', `AUTHOR ID`, 'ROYALTY' + advance AS `ROYALTY`
+FROM publications.Step2temp as s2
+LEFT JOIN titles ON s2.title_id = titles.title_id
 LEFT JOIN publishers ON titles.pub_id = publishers.pub_id
-GROUP BY `TITLE ID`, `AUTHOR ID`
-ORDER BY SUM(`ROYALTY`) + advance DESC
+GROUP BY s2.title_id , `AUTHOR ID`
+ORDER BY 'ROYALTY' + advance DESC
 LIMIT 3;
 
-SELECT * FROM Step3;
 
 --CHALLENGE 3
 CREATE TABLE publications.most_profiting_authors
