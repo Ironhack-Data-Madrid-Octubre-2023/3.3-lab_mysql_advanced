@@ -69,13 +69,33 @@ INNER JOIN sales s
 ON t.title_id = s.title_id;  
 
 -- Step 2
+
+CREATE TEMPORARY TABLE publications.royalty_step2 -- Creo una temporary table de este segundo paso
 SELECT 
-    Title_ID, Author_ID, SUM(SalesRoyalty) Total_Royalties -- Pillo las columnas de la tabla temporal que he creado y esta vez hago la suma de los royalties y agrupo por título y autor
+    Title_ID, Author_ID, SUM(SalesRoyalty) Total_Royalties -- Primeras dos filas igual, la tercera es la suma de las royalties y agrupo por title y author
 FROM
     royalty_step1
 GROUP BY Title_ID , Author_ID
-ORDER BY Total_Royalties DESC; -- Ordeno de mayor a menos los royalties totales
+ORDER BY Total_Royalties DESC;
+
+-- Step 3
+
+SELECT 
+    royalty_step2.Author_ID Author_ID, -- Author_ID de la segunda tabla temporal creada
+    SUM(royalty_step2.Total_royalties + t.advance) TotalEarnings -- Sumo los Total_Royalties de la 2ª tabla temporal y el adelantado de cada obra -> agrupo por Author_ID
+FROM
+    royalty_step2
+        INNER JOIN
+    titles t ON royalty_step2.title_id = t.title_id
+GROUP BY Author_ID
+ORDER BY TotalEarnings DESC -- Ordeno de mayor a menor
+;
 	
+/*
+No entiendo muy bien porque tengo un distinto output haciéndolo con subquerys y tablas temporales. He comprobado que los steps 1 y 2 con ambos métodos 
+salen igual pero algo debo estar haciendo mal en el step 3 de alguno de los dos  (o quizás ambos jaja).
+
+*/
 
 
 --CHALLENGE 3
