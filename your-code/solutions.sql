@@ -1,10 +1,8 @@
 -- Derived Table --
 
 select
-	au.au_id as 'AUTHOR ID',
-	au_lname as 'LAST NAME',
-	au_fname as 'FIRST NAME',
-	SUM(tl.price * sl.qty * tl.royalty / 100 * tlau.royaltyper / 100) + SUM(tl.price * sl.qty * tl.advance) as 'TOTAL'
+	au.au_id,
+	SUM(tl.price * sl.qty * tl.royalty / 100 * tlau.royaltyper / 100) + SUM(tl.price * sl.qty * tl.advance) as profit
 from
 	authors as au
 left join
@@ -20,17 +18,15 @@ group by
 	au.au_id,
 	tl.title_id
 order by
-	'TOTAL' desc
+	profit desc
 limit 3;
 
 -- Temporary Table --
 
 create temporary table royalties 
 select
-	au.au_id as 'AUTHOR ID',
-	au_lname as 'LAST NAME',
-	au_fname as 'FIRST NAME',
-	SUM(tl.price * sl.qty * tl.royalty / 100 * tlau.royaltyper / 100) + SUM(tl.price * sl.qty * tl.advance) as 'TOTAL'
+	au.au_id,
+	SUM(tl.price * sl.qty * tl.royalty / 100 * tlau.royaltyper / 100) + SUM(tl.price * sl.qty * tl.advance) as profit
 from
 	authors as au
 left join
@@ -46,7 +42,7 @@ group by
 	au.au_id,
 	tl.title_id
 order by
-	'TOTAL' desc
+	profit desc
 limit 3;
 
 -- New Table --
@@ -54,10 +50,8 @@ limit 3;
 create table most_profiting_authors
 (
 select
-	au.au_id as 'AUTHOR ID',
-	au_lname as 'LAST NAME',
-	au_fname as 'FIRST NAME',
-	SUM(tl.price * sl.qty * tl.royalty / 100 * tlau.royaltyper / 100) + SUM(tl.price * sl.qty * tl.advance) as 'TOTAL'
+	au.au_id,
+	SUM(tl.price * sl.qty * tl.royalty / 100 * tlau.royaltyper / 100) + SUM(tl.price * sl.qty * tl.advance) as profit
 from
 	authors as au
 left join
@@ -73,5 +67,5 @@ group by
 	au.au_id,
 	tl.title_id
 order by
-	'TOTAL' desc
+	profit desc
 limit 3);
