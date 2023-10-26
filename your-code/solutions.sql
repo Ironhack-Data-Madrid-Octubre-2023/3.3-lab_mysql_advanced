@@ -40,6 +40,7 @@ ORDER BY `Sales Royalty` DESC;
 
 SELECT 
     ta.au_id AS 'Author ID', 
+    ta.title_id AS 'TITLE ID',
     SUM(t.advance + s.qty * t.price * t.royalty / 100 * ta.royaltyper / 100) AS 'Total Earnings'
 
 FROM titleauthor AS ta
@@ -53,23 +54,7 @@ ORDER BY 'Total Earnings' DESC
 LIMIT 3;
 
 
-## Challenge 2 - Alternative Solution
-
-###CREATE TEMPORARY TABLE sales_royalties AS
-SELECT title_id, SUM(qty * price * royalty / 100 * royaltyper / 100) AS sales_royalty
-FROM sales
-JOIN titles ON sales.title_id = titles.title_id
-GROUP BY title_id;
-
-SELECT 
-    authors.au_id AS 'Author ID', 
-    SUM(titleauthor.advance + sales_royalties.sales_royalty) AS 'Total Earnings'
-FROM titleauthor
-JOIN authors ON titleauthor.au_id = authors.au_id
-JOIN sales_royalties ON titleauthor.title_id = sales_royalties.title_id
-GROUP BY authors.au_id
-ORDER BY 'Total Earnings' DESC
-###LIMIT 3;
+## Challenge 2 - Alternative Solution - Temporary table
 
 ### Step 1: Calculate the royalties of each sales for each author (Alternativo)
 
@@ -98,10 +83,29 @@ FROM tempor_salesroyalty
 GROUP BY `Author ID`, `Title ID`
 
 
-### Step 3: Aggregate the total royalties for each title for each author (Alternativo)
+### Step 3: Calculate the total profits of each author (Alternativo)
+
+SELECT 
+		suma_salesroyalty.`Author ID`, 
+        (suma_salesroyalty.`suma salesroyalty`+ t.advance) AS `TOTAL PROFIT`
+
+FROM suma_salesroyalty
+INNER JOIN titles AS t 
+ON suma_salesroyalty.`Title ID` = t.title_id
+
+ORDER BY `TOTAL PROFIT` DESC
+LIMIT 3;
 
 
+## Challenge 3 - Most Profiting Authors
 
+CREATE TABLE most_profiting_authors AS
+SELECT 
+    suma_salesroyalty.`Author ID` AS au_id, 
+    (suma_salesroyalty.`suma salesroyalty`+ t.advance) AS `profits`
 
+FROM suma_salesroyalty
+INNER JOIN titles AS t 
+ON suma_salesroyalty.`Title ID` = t.title_id
 
-
+ORDER BY profits DESC;
