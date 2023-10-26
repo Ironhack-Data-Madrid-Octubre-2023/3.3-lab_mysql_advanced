@@ -28,7 +28,7 @@ GROUP BY titleauthor.title_id, titleauthor.au_id;
 
 SELECT
     titleauthor.au_id AS `AUTHOR ID`,
-    SUM(titles.price * sales.qty * titles.royalty / 100 * titleauthor.royaltyper / 100) + MAX(titles.advance) AS `TOTAL PROFITS`
+    SUM(titles.price * sales.qty * titles.royalty / 100 * titleauthor.royaltyper / 100) + SUM(titles.advance) AS `TOTAL PROFITS`
 FROM titleauthor
 INNER JOIN titles ON titleauthor.title_id = titles.title_id
 INNER JOIN sales ON titles.title_id = sales.title_id
