@@ -47,13 +47,13 @@ LEFT JOIN sales ON titles.title_id = sales.title_id;
 
 CREATE TEMPORARY TABLE Step2 AS
 SELECT `TITLE ID` as title_id , `AUTHOR ID`, SUM(`ROYALTY`) AS `ROYALTY`
-FROM p1
+FROM Step1
 GROUP BY `TITLE ID`, `AUTHOR ID`;
 
 CREATE TEMPORARY TABLE Step3 AS
 SELECT title_id , `AUTHOR ID`, SUM(`ROYALTY`) + advance AS `ROYALTY`
-FROM p1
-LEFT JOIN titles ON TtempStep1.title_id = titles.title_id
+FROM Step1
+LEFT JOIN titles ON Step1.title_id = titles.title_id
 LEFT JOIN publishers ON titles.pub_id = publishers.pub_id
 GROUP BY `TITLE ID`, `AUTHOR ID`
 ORDER BY SUM(`ROYALTY`) + advance DESC
