@@ -10,7 +10,7 @@ from titleauthor as ti
 inner join titles as t 
 on ti.title_id = t.title_id
 inner join sales as s 
-on t.title_id = s.title_id;
+on ti.title_id = s.title_id;
 
 --Step 2
 
@@ -40,7 +40,7 @@ from (
     select
         t.title_id as title_id,
         ti.au_id as author_id,
-        (t.price * s.qty * t.royalty / 100 * ti.royaltyper / 100) as aggregated_royalties,
+        (t.price * s.qty * t.royalty / 100 * ti.royaltyper / 100) as sales_royalty,
         t.advance as advance
     from titleauthor as ti
     inner join titles as t on ti.title_id = t.title_id
@@ -49,3 +49,21 @@ from (
 group by author_id
 order by profits desc
 limit 3;
+
+CHALLENGE 3:
+
+CREATE TABLE most_profiting_authors (
+    au_id VARCHAR(90) PRIMARY KEY,
+    profits DECIMAL(50, 3)
+);
+
+insert into most_profiting_authors (au_id, profits)
+select ti.au_id, SUM(t.price * s.qty * t.royalty / 100 * ti.royaltyper / 100 + t.advance) as profits
+from titleauthor as ti
+inner join titles as t 
+on t.title_id = ti.title_id
+inner join sales as s 
+on s.title_id = ti.title_id
+group by ti.au_id;
+
+
