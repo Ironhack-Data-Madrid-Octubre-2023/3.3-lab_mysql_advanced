@@ -1,4 +1,5 @@
---- Challenge 1. Step 1
+USE publications;
+-- Challenge 1. Step 1
 SELECT
     authors.au_id AS `AUTHOR ID`,
     titles.title_id AS `TITLE ID`,
@@ -9,7 +10,7 @@ LEFT JOIN authors ON titleauthor.au_id = authors.au_id
 LEFT JOIN titles ON titleauthor.title_id = titles.title_id
 LEFT JOIN sales ON titles.title_id = sales.title_id;
 
---- Challenge 1. Step 2
+-- Challenge 1. Step 2
 
 SELECT
     authors.au_id AS `AUTHOR ID`,
@@ -22,7 +23,7 @@ LEFT JOIN titles ON titleauthor.title_id = titles.title_id
 LEFT JOIN sales ON titles.title_id = sales.title_id
 GROUP BY authors.au_id, titles.title_id;
 
---- Challenge 1. Step 3
+-- Challenge 1. Step 3
 
 SELECT
     authors.au_id AS `AUTHOR ID`,
@@ -36,7 +37,7 @@ GROUP BY authors.au_id
 ORDER BY PROFITS_ROYALTIES DESC
 LIMIT 3;
 
---- Challenge 2.
+-- Challenge 2.
 -- Temporary table for aggregated royalties
 CREATE TEMPORARY TABLE tmp_royalties AS
 SELECT
@@ -77,5 +78,18 @@ SELECT
 FROM authors
 LEFT JOIN tmp_earnings ON authors.au_id = tmp_earnings.`AUTHOR ID`;
 
---- Challenge 3.
+-- Challenge 3.
+CREATE TABLE best_selling_authors (
+    id INT PRIMARY KEY NOT NULL,
+    au_id VARCHAR(20),
+    profits VARCHAR(20)
+);
 
+INSERT INTO best_selling_authors(au_id, profits)
+SELECT
+    tmp_advances.`AUTHOR ID` AS `au_id`,
+    (tmp_advances.`TOTAL_ADVANCE` + titles.advance) AS `profits`
+FROM tmp_advances
+INNER JOIN titles ON tmp_advances.`AUTHOR ID` = titles.title_id
+ORDER BY `profits` DESC
+LIMIT 3;
